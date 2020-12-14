@@ -67,7 +67,7 @@ If you have only one navigation you could include one of the three templates in 
 like follows:
 ```jade
 //- /src/views/layout/layout.pug
-...
+//- ...
 body
     include ../../src/plugins/navigation/views/simple-navigation
 ```
@@ -80,7 +80,7 @@ If you have multiple navigation elements, like one for the main navigation and o
 could use the build in mixins in `navigation/views/mixins` to render your navigation. See example below:
 ```jade
 //- /src/views/layout/layout.pug
-...
+//- ...
 body
     include ../../src/plugins/navigation/views/mixins/pipe-separated-navigation
     +pipeSeparatedNav(app.nav.main.elements, app.nav.main.className) //- the class name is optional
