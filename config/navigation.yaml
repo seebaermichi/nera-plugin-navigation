@@ -1,0 +1,20 @@
+active_class: "active"
+active_path_class: "active-path"
+nav_class: "nav"
+elements:
+  main:
+    - href: /index.html
+      name: Home
+    - href: /service/service.html
+      name: Service
+    - href: /prices.html
+      name: Prices
+    - href: /contact.html
+      name: Contact
+    - href: /about-us/index.html
+      name: About us
+  footer:
+    - href: /imprint.html
+      name: Imprint
+    - href: /data-protection/index.html
+      name: Data protection

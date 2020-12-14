@@ -1,0 +1,6 @@
+include ../helper/mixins
+
+mixin simpleNav(elements=app.nav.elements, className='')
+    nav(class=`${className}`)
+        include ../helper/setup
+            +link(item, activeClass, activePathClass)
