@@ -1,0 +1,10 @@
+
+active_class: "active"
+active_path_class: "active-path"
+nav_class: "nav"
+elements:
+  main:
+    - href: /index.html
+      name: Home
+    - href: /about/index.html
+      name: About

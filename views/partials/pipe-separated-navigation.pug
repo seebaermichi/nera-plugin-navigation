@@ -1,0 +1,8 @@
+include ../helper/mixins
+
+mixin pipeSeparatedNav(elements=app.nav.elements, className='')
+    nav(class=`${className}`)
+        include ../helper/setup
+            if index !== 0
+                | &nbsp;|&nbsp;
+            +link(item, activeClass, activePathClass)

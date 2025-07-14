@@ -1,0 +1,48 @@
+{
+    "name": "@nera-static/plugin-navigation",
+    "version": "1.0.0",
+    "description": "A plugin for Nera static site generator to generate navigations with optional templates and mixins.",
+    "main": "index.js",
+    "type": "module",
+    "exports": {
+        ".": "./index.js"
+    },
+    "files": [
+        "config",
+        "index.js",
+        "views"
+    ],
+    "keywords": [
+        "nera",
+        "plugin",
+        "navigation",
+        "static-site",
+        "mixin",
+        "template"
+    ],
+    "author": "Michael Becker",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/seebaermichi/nera-plugin-navigation.git"
+    },
+    "bugs": {
+        "url": "https://github.com/seebaermichi/nera-plugin-navigation/issues"
+    },
+    "homepage": "https://github.com/seebaermichi/nera-plugin-navigation#readme",
+    "dependencies": {
+        "@nera-static/plugin-utils": "^1.0.3"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "devDependencies": {
+        "cheerio": "^1.1.0",
+        "pug": "^3.0.3",
+        "vitest": "^3.2.4"
+    },
+    "scripts": {
+        "test": "vitest"
+    },
+    "sideEffects": false
+}
