@@ -1,6 +1,6 @@
 {
     "name": "@nera-static/plugin-navigation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A plugin for Nera static site generator to generate navigations with optional templates and mixins.",
     "main": "index.js",
     "type": "module",
