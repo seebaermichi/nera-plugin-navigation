@@ -3,6 +3,10 @@
     "version": "1.0.1",
     "description": "A plugin for Nera static site generator to generate navigations with optional templates and mixins.",
     "main": "index.js",
+    "scripts": {
+        "lint": "eslint .",
+        "test": "vitest"
+    },
     "type": "module",
     "exports": {
         ".": "./index.js"
@@ -31,7 +35,9 @@
     },
     "homepage": "https://github.com/seebaermichi/nera-plugin-navigation#readme",
     "dependencies": {
-        "@nera-static/plugin-utils": "^1.0.3"
+        "@nera-static/plugin-utils": "^1.0.3",
+        "eslint": "^9.31.0",
+        "husky": "^9.1.7"
     },
     "engines": {
         "node": ">=18"
@@ -40,9 +46,6 @@
         "cheerio": "^1.1.0",
         "pug": "^3.0.3",
         "vitest": "^3.2.4"
-    },
-    "scripts": {
-        "test": "vitest"
     },
     "sideEffects": false
 }
