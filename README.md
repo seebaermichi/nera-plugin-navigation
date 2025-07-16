@@ -2,6 +2,18 @@
 
 A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator to create navigations from config files. Supports mixins and templates for easy rendering.
 
+## ✨ Features
+
+-   Define one or more navigations via YAML config
+-   Access navigation data in your templates (`app.nav`)
+-   Support for multi-level navigations (e.g. main, footer)
+-   Includes built-in Pug templates and mixins for rendering:
+    -   Pipe-separated links
+    -   Link lists
+    -   Mixin-powered flexible layout
+-   Automatic active/path highlighting support
+-   Zero-runtime, static navigation structure
+
 ## 🚀 Installation
 
 You can install this plugin by running the following in the root folder of your Nera project:
@@ -27,16 +39,16 @@ Example `navigation/config/navigation.yaml`:
 
 ```yaml
 elements:
-  - href: /index.html
-    name: Home
-  - href: /service/service.html
-    name: Service
-  - href: /prices.html
-    name: Prices
-  - href: /contact.html
-    name: Contact
-  - href: /about-us/index.html
-    name: About us
+    - href: /index.html
+      name: Home
+    - href: /service/service.html
+      name: Service
+    - href: /prices.html
+      name: Prices
+    - href: /contact.html
+      name: Contact
+    - href: /about-us/index.html
+      name: About us
 ```
 
 Access it in your templates via:
@@ -49,14 +61,14 @@ app.nav.elements
 
 ```yaml
 elements:
-  main:
-    - href: /index.html
-      name: Home
-    - href: /service/service.html
-      name: Service
-  footer:
-    - href: /imprint.html
-      name: Imprint
+    main:
+        - href: /index.html
+          name: Home
+        - href: /service/service.html
+          name: Service
+    footer:
+        - href: /imprint.html
+          name: Imprint
 ```
 
 Use:
@@ -83,8 +95,9 @@ include ../../src/plugins/navigation/views/simple-navigation
 ```
 
 Other available templates:
-- `pipe-separated-navigation.pug`
-- `link-list-navigation.pug`
+
+-   `pipe-separated-navigation.pug`
+-   `link-list-navigation.pug`
 
 ### Built-in Mixins
 
