@@ -120,8 +120,14 @@ npm run test
 
 ## 🧑‍💻 Author
 
-Michael Becker
-[GitHub](https://github.com/seebaermichi)
+Michael Becker  
+[https://github.com/seebaermichi](https://github.com/seebaermichi)
+
+## 🔗 Links
+
+-   [Plugin Repository](https://github.com/seebaermichi/nera-plugin-navigation)
+-   [NPM Package](https://www.npmjs.com/package/@nera-static/plugin-navigation)
+-   [Nera Static Site Generator](https://github.com/seebaermichi/nera)
 
 ## 📦 License
 
