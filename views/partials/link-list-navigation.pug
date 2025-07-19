@@ -1,7 +1,7 @@
 include ../helper/mixins
 
 mixin linkListNav(elements=app.nav.elements, className='')
-    ul.nav(class=`${className}`)
+    ul.nav.nav--list(class=`${className}`)
         include ../helper/setup
-            li.nav-item
+            li.nav__item
                 +link(item, activeClass, activePathClass)

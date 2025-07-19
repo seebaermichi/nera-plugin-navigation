@@ -1,6 +1,6 @@
 each item, index in elements || app.nav.elements
   - const isActive = item.href === meta.fullPath
-  - const activeClass = isActive ? app.nav.activeClass : ''
+  - const activeClass = isActive ? 'nav__link--active' : ''
   - const isNotHome = meta.dirname !== '/'
   - const isParent = isNotHome && item.href.indexOf(meta.dirname) === 0
-  - const activePathClass = !isActive && isParent ? app.nav.activePathClass : ''
+  - const activePathClass = !isActive && isParent ? 'nav__link--active-path' : ''

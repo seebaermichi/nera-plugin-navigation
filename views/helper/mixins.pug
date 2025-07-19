@@ -1,2 +1,2 @@
 mixin link(item, activeClass, activePathClass)
-  a(href=item.href, class=`${activeClass}${activePathClass}`) #{ item.name }
+  a.nav__link(href=item.href, class=`${activeClass} ${activePathClass}`.trim()) #{ item.name }

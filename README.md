@@ -4,15 +4,16 @@ A plugin for the [Nera](https://github.com/seebaermichi/nera) static site genera
 
 ## ✨ Features
 
--   Define one or more navigations via YAML config
--   Access navigation data in your templates (`app.nav`)
--   Support for multi-level navigations (e.g. main, footer)
--   Includes built-in Pug templates and mixins for rendering:
+-   **Flexible Navigation Structure**: Define one or more navigations via YAML config
+-   **Template Integration**: Access navigation data in your templates (`app.nav`)
+-   **Multi-Level Support**: Support for multi-level navigations (e.g. main, footer)
+-   **Built-in Templates**: Includes ready-to-use Pug templates and mixins:
     -   Pipe-separated links
     -   Link lists
     -   Mixin-powered flexible layout
--   Automatic active/path highlighting support
--   Zero-runtime, static navigation structure
+-   **Active State Management**: Automatic active/path highlighting support
+-   **Zero Runtime**: Static navigation structure, no client-side processing
+-   **Nera v4.1.0 Compatible**: Optimized for the latest Nera architecture
 
 ## 🚀 Installation
 
@@ -118,6 +119,46 @@ npm install
 npm run test
 ```
 
+## 🎨 CSS Classes (BEM Methodology)
+
+The generated HTML uses BEM (Block Element Modifier) CSS classes for consistent styling:
+
+```css
+/* Navigation Block */
+.nav {
+    /* Main navigation container */
+}
+
+/* Navigation Elements */
+.nav__list {
+    /* Navigation list container */
+}
+.nav__item {
+    /* Individual navigation item */
+}
+.nav__item--inline {
+    /* Inline item modifier */
+}
+.nav__link {
+    /* Navigation link */
+}
+.nav__separator {
+    /* Pipe separator element */
+}
+
+/* Navigation Modifiers */
+.nav__link--active {
+    /* Currently active link */
+}
+.nav__link--active-path {
+    /* Parent path link */
+}
+```
+
+## 📋 Version History
+
+All changes are documented in [CHANGELOG.md](./CHANGELOG.md).
+
 ## 🧑‍💻 Author
 
 Michael Becker  
@@ -128,6 +169,7 @@ Michael Becker
 -   [Plugin Repository](https://github.com/seebaermichi/nera-plugin-navigation)
 -   [NPM Package](https://www.npmjs.com/package/@nera-static/plugin-navigation)
 -   [Nera Static Site Generator](https://github.com/seebaermichi/nera)
+-   [Plugin Documentation](https://github.com/seebaermichi/nera-plugins#plugins)
 
 ## 📦 License
 
