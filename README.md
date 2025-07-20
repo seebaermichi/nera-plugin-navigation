@@ -1,58 +1,62 @@
 # @nera-static/plugin-navigation
 
-A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator to create navigations from config files. Supports mixins and templates for easy rendering.
+A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator to create navigations from config files. Supports mixins and templates for easy rendering and styling.
 
 ## ✨ Features
 
--   **Flexible Navigation Structure**: Define one or more navigations via YAML config
--   **Template Integration**: Access navigation data in your templates (`app.nav`)
--   **Multi-Level Support**: Support for multi-level navigations (e.g. main, footer)
--   **Built-in Templates**: Includes ready-to-use Pug templates and mixins:
-    -   Pipe-separated links
-    -   Link lists
-    -   Mixin-powered flexible layout
--   **Active State Management**: Automatic active/path highlighting support
--   **Zero Runtime**: Static navigation structure, no client-side processing
--   **Nera v4.1.0 Compatible**: Optimized for the latest Nera architecture
+- Define one or more navigations via YAML config
+- Access navigation data directly in templates (`app.nav`)
+- Support for multi-level navigations (e.g., main, footer)
+- Includes ready-to-use Pug templates and mixins
+- Automatic active and path highlighting
+- Static, zero-runtime overhead
+- Full compatibility with Nera v4.1.0+
 
 ## 🚀 Installation
 
-You can install this plugin by running the following in the root folder of your Nera project:
+Install the plugin in your Nera project:
 
 ```bash
 npm install @nera-static/plugin-navigation
 ```
 
-Then create a `navigation.yaml` file inside your project’s `config/` directory:
+Then create the configuration file:
+
+```bash
+mkdir -p config
+touch config/navigation.yaml
+```
+
+This creates:
 
 ```
 config/
 └── navigation.yaml
 ```
 
-Nera will automatically detect the plugin and load your navigation configuration. No additional setup or imports are required.
+Nera will automatically detect the plugin and load the configuration.
 
 ## ⚙️ Configuration
 
-### Single Navigation
+Define your navigation(s) in `config/navigation.yaml`.
 
-Example `navigation/config/navigation.yaml`:
+### Single Navigation
 
 ```yaml
 elements:
-    - href: /index.html
-      name: Home
-    - href: /service/service.html
-      name: Service
-    - href: /prices.html
-      name: Prices
-    - href: /contact.html
-      name: Contact
-    - href: /about-us/index.html
-      name: About us
+  - href: /index.html
+    name: Home
+  - href: /service/service.html
+    name: Service
+  - href: /prices.html
+    name: Prices
+  - href: /contact.html
+    name: Contact
+  - href: /about-us/index.html
+    name: About us
 ```
 
-Access it in your templates via:
+Access in templates:
 
 ```pug
 app.nav.elements
@@ -62,114 +66,99 @@ app.nav.elements
 
 ```yaml
 elements:
-    main:
-        - href: /index.html
-          name: Home
-        - href: /service/service.html
-          name: Service
-    footer:
-        - href: /imprint.html
-          name: Imprint
+  main:
+    - href: /index.html
+      name: Home
+    - href: /service/service.html
+      name: Service
+  footer:
+    - href: /imprint.html
+      name: Imprint
 ```
 
-Use:
+Access in templates:
 
 ```pug
 app.nav.main.elements
 app.nav.footer.elements
 ```
 
-Each element has: `href`, `name`, `path`.
+Each element includes `href`, `name`, and `path`.
 
-## 🧩 Rendering Options
+## 🧩 Usage
 
-### Custom Rendering
+### Manual Rendering
 
-Use the `app.nav.*.elements` arrays in your templates manually or via your own loops.
+Loop through `app.nav.*.elements` directly in your Pug templates.
 
-### Built-in Templates
+## 🛠️ Template Publishing
 
-If you like to, include one of the built-in templates in `views/`:
+Use the default templates provided by the plugin:
 
-```pug
-include ../../src/plugins/navigation/views/simple-navigation
+```bash
+npx @nera-static/plugin-navigation run publish-template
 ```
 
-Other available templates:
+This copies template files to:
 
--   `pipe-separated-navigation.pug`
--   `link-list-navigation.pug`
-
-### Built-in Mixins
-
-If using multiple navigations, use the mixins in `views/mixins/`:
-
-```pug
-include ../../src/plugins/navigation/views/mixins/pipe-separated-navigation
-
-+pipeSeparatedNav(app.nav.main.elements, app.nav.main.className)
+```
+views/vendor/plugin-navigation/
 ```
 
-> The optional `nav_class` value can be set in the YAML config.
+Then include them in your layouts or pages as needed.
+
+## 🎨 Styling
+
+The plugin uses BEM CSS methodology:
+
+```css
+.nav { }
+.nav__list { }
+.nav__item { }
+.nav__item--inline { }
+.nav__link { }
+.nav__separator { }
+.nav__link--active { }
+.nav__link--active-path { }
+```
+
+Override or extend these classes in your project’s CSS.
+
+## 📊 Generated Output
+
+The plugin injects navigation data into `app.nav` without generating HTML. Use templates or mixins for output.
 
 ## 🧪 Development
 
 ```bash
 npm install
-npm run test
+npm test
+npm run lint
 ```
 
-## 🎨 CSS Classes (BEM Methodology)
+Tests use [Vitest](https://vitest.dev) and validate:
 
-The generated HTML uses BEM (Block Element Modifier) CSS classes for consistent styling:
-
-```css
-/* Navigation Block */
-.nav {
-    /* Main navigation container */
-}
-
-/* Navigation Elements */
-.nav__list {
-    /* Navigation list container */
-}
-.nav__item {
-    /* Individual navigation item */
-}
-.nav__item--inline {
-    /* Inline item modifier */
-}
-.nav__link {
-    /* Navigation link */
-}
-.nav__separator {
-    /* Pipe separator element */
-}
-
-/* Navigation Modifiers */
-.nav__link--active {
-    /* Currently active link */
-}
-.nav__link--active-path {
-    /* Parent path link */
-}
-```
-
-## 📋 Version History
-
-All changes are documented in [CHANGELOG.md](./CHANGELOG.md).
+- Navigation data structure
+- Multi-level navigation support
+- Template rendering
+- Class handling and active link detection
 
 ## 🧑‍💻 Author
 
-Michael Becker  
+Michael Becker
 [https://github.com/seebaermichi](https://github.com/seebaermichi)
 
 ## 🔗 Links
 
--   [Plugin Repository](https://github.com/seebaermichi/nera-plugin-navigation)
--   [NPM Package](https://www.npmjs.com/package/@nera-static/plugin-navigation)
--   [Nera Static Site Generator](https://github.com/seebaermichi/nera)
--   [Plugin Documentation](https://github.com/seebaermichi/nera-plugins#plugins)
+- [Plugin Repository](https://github.com/seebaermichi/nera-plugin-navigation)
+- [NPM Package](https://www.npmjs.com/package/@nera-static/plugin-navigation)
+- [Nera Static Site Generator](https://github.com/seebaermichi/nera)
+
+## 🧩 Compatibility
+
+- **Nera**: v4.1.0+
+- **Node.js**: >= 18
+- **Plugin API**: Uses `getAppData()` for injecting navigation structure
 
 ## 📦 License
 
