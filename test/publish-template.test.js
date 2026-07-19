@@ -1,100 +1,120 @@
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
-import { execSync } from 'child_process'
-import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest'
+import { execFileSync } from 'child_process'
+import pug from 'pug'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 
-const TEST_ROOT = path.resolve('.tmp/publish-template-test')
 const SCRIPT_PATH = path.resolve('bin/publish-template.js')
-const TEMPLATES_SRC = path.resolve('views/')
-const TEMPLATES_DEST = path.join(TEST_ROOT, 'views/vendor/plugin-navigation/')
-const DUMMY_PACKAGE = path.join(TEST_ROOT, 'package.json')
 
-// Track whether we created template sources during this test
-let createdTemplateFiles = []
+// The publish target is a throwaway directory. Earlier versions of this file
+// wrote stub .pug files into the real views/ source tree when any were
+// missing, which is how a broken template could be "verified" as present.
+let projectRoot
+let templatesDest
+
+function publish(args = []) {
+    return execFileSync('node', [SCRIPT_PATH, ...args], {
+        cwd: projectRoot,
+        stdio: 'pipe',
+    }).toString()
+}
 
 beforeEach(() => {
-    // Clean test workspace
-    fs.rmSync(TEST_ROOT, { recursive: true, force: true })
-    fs.mkdirSync(TEST_ROOT, { recursive: true })
-    fs.writeFileSync(DUMMY_PACKAGE, JSON.stringify({ name: 'dummy' }, null, 2))
+    projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nera-nav-publish-'))
+    templatesDest = path.join(projectRoot, 'views/vendor/plugin-navigation')
 
-    // Ensure template source files exist
-    if (!fs.existsSync(TEMPLATES_SRC)) {
-        fs.mkdirSync(TEMPLATES_SRC, { recursive: true })
-    }
-
-    // Create minimal templates if they don't exist
-    const templateFiles = [
-        'simple-navigation.pug',
-        'pipe-separated-navigation.pug',
-        'link-list-navigation.pug',
-    ]
-    templateFiles.forEach((file) => {
-        const filePath = path.join(TEMPLATES_SRC, file)
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, `// ${file} template content`)
-            createdTemplateFiles.push(filePath)
-        }
-    })
+    // Minimum shape validateNeraProject() looks for.
+    fs.writeFileSync(
+        path.join(projectRoot, 'package.json'),
+        JSON.stringify({ name: 'my-site' }, null, 2)
+    )
+    fs.mkdirSync(path.join(projectRoot, 'config'), { recursive: true })
+    fs.writeFileSync(path.join(projectRoot, 'config/app.yaml'), 'lang: en\n')
+    fs.mkdirSync(path.join(projectRoot, 'pages'), { recursive: true })
 })
 
 afterEach(() => {
-    fs.rmSync(TEST_ROOT, { recursive: true, force: true })
-
-    // Only delete template files we created during this test
-    createdTemplateFiles.forEach((filePath) => {
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath)
-        }
-    })
-    createdTemplateFiles = []
+    fs.rmSync(projectRoot, { recursive: true, force: true })
 })
 
 describe('publish-template command', () => {
     it('copies all pug templates to the correct location', () => {
-        execSync(`node ${SCRIPT_PATH}`, { cwd: TEST_ROOT })
+        publish()
 
-        expect(fs.existsSync(TEMPLATES_DEST)).toBe(true)
+        expect(fs.existsSync(templatesDest)).toBe(true)
 
-        const simpleNavTemplate = path.join(
-            TEMPLATES_DEST,
-            'simple-navigation.pug'
-        )
-        const pipeNavTemplate = path.join(
-            TEMPLATES_DEST,
-            'pipe-separated-navigation.pug'
-        )
-        const linkListTemplate = path.join(
-            TEMPLATES_DEST,
-            'link-list-navigation.pug'
-        )
+        for (const template of [
+            'simple-navigation.pug',
+            'pipe-separated-navigation.pug',
+            'link-list-navigation.pug',
+        ]) {
+            expect(fs.existsSync(path.join(templatesDest, template))).toBe(true)
+        }
+    })
 
-        expect(fs.existsSync(simpleNavTemplate)).toBe(true)
-        expect(fs.existsSync(pipeNavTemplate)).toBe(true)
-        expect(fs.existsSync(linkListTemplate)).toBe(true)
+    it('copies the partials and helpers the templates include', () => {
+        publish()
 
-        const content = fs.readFileSync(simpleNavTemplate, 'utf-8')
-        expect(content).toContain('include partials/simple-navigation')
+        // The top-level templates are useless without these: each one opens
+        // with `include partials/...`, and every partial includes ../helper/.
+        for (const nested of [
+            'partials/simple-navigation.pug',
+            'partials/pipe-separated-navigation.pug',
+            'partials/link-list-navigation.pug',
+            'helper/mixins.pug',
+            'helper/setup.pug',
+        ]) {
+            expect(fs.existsSync(path.join(templatesDest, nested))).toBe(true)
+        }
+    })
+
+    it('publishes templates that actually compile', () => {
+        publish()
+
+        // The point of the partials fix: a published template has to render
+        // from its new home, not merely exist there.
+        for (const template of [
+            'simple-navigation.pug',
+            'pipe-separated-navigation.pug',
+            'link-list-navigation.pug',
+        ]) {
+            expect(() =>
+                pug.compileFile(path.join(templatesDest, template))
+            ).not.toThrow()
+        }
     })
 
     it('skips if templates directory already exists', () => {
-        fs.mkdirSync(TEMPLATES_DEST, { recursive: true })
-        fs.writeFileSync(
-            path.join(TEMPLATES_DEST, 'existing.pug'),
-            '// existing'
-        )
+        fs.mkdirSync(templatesDest, { recursive: true })
+        fs.writeFileSync(path.join(templatesDest, 'existing.pug'), '// existing')
 
-        const output = execSync(`node ${SCRIPT_PATH}`, {
-            cwd: TEST_ROOT,
-            stdio: 'pipe',
-        }).toString()
+        const output = publish()
 
         expect(output).toMatch(/Skipping/i)
-        const existingFile = path.join(TEMPLATES_DEST, 'existing.pug')
-        expect(fs.existsSync(existingFile)).toBe(true)
+        expect(output).toMatch(/--force/)
+        expect(
+            fs.readFileSync(path.join(templatesDest, 'existing.pug'), 'utf-8')
+        ).toBe('// existing')
     })
-})
 
-afterAll(() => {
-    fs.rmSync(path.resolve('.tmp'), { recursive: true, force: true })
+    it('overwrites an existing directory when --force is passed', () => {
+        fs.mkdirSync(templatesDest, { recursive: true })
+        fs.writeFileSync(
+            path.join(templatesDest, 'simple-navigation.pug'),
+            '// stale'
+        )
+
+        publish(['--force'])
+
+        const content = fs.readFileSync(
+            path.join(templatesDest, 'simple-navigation.pug'),
+            'utf-8'
+        )
+        expect(content).not.toBe('// stale')
+        expect(content).toContain('include partials/simple-navigation')
+        expect(
+            fs.existsSync(path.join(templatesDest, 'partials/simple-navigation.pug'))
+        ).toBe(true)
+    })
 })

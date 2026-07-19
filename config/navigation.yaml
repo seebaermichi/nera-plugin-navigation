@@ -1,0 +1,30 @@
+# Default configuration for @nera-static/plugin-navigation.
+#
+# This file is documentation and a starting point. The plugin reads
+# config/navigation.yaml from YOUR project root, not from this package —
+# copy this file there and edit it.
+
+# CSS class applied to the link matching the current page.
+active_class: active
+
+# CSS class applied to a link whose path is an ancestor of the current page.
+active_path_class: active-path
+
+# Base CSS class for the navigation element.
+nav_class: nav
+
+# A single navigation: a flat list, available as app.nav.elements
+elements:
+    - href: /index.html
+      name: Home
+
+# For several navigations, nest them under names instead. Each becomes
+# app.nav.<name>.elements:
+#
+# elements:
+#   main:
+#     - href: /index.html
+#       name: Home
+#   footer:
+#     - href: /imprint.html
+#       name: Imprint

@@ -1,20 +1,27 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import os from 'os'
 import path from 'path'
-import fs from 'fs/promises'
+import fs from 'fs'
 import pug from 'pug'
 import { load } from 'cheerio'
 import { fileURLToPath } from 'url'
 import { getAppData } from '../index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const CONFIG_DIR = path.resolve(process.cwd(), 'config')
 const VIEWS_DIR = path.join(__dirname, '../views')
-const CONFIG_FILE = path.join(CONFIG_DIR, 'navigation.yaml')
 
-beforeAll(async () => {
-    await fs.mkdir(CONFIG_DIR, { recursive: true })
+// Config is read relative to cwd, so this runs from a throwaway directory
+// rather than writing into — and then deleting from — the real repo, which
+// now ships its own config/navigation.yaml.
+const REPO_ROOT = process.cwd()
+let workDir
 
-    const configContent = `
+beforeAll(() => {
+    workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'nera-nav-integration-'))
+    fs.mkdirSync(path.join(workDir, 'config'), { recursive: true })
+    fs.writeFileSync(
+        path.join(workDir, 'config/navigation.yaml'),
+        `
 active_class: "active"
 active_path_class: "active-path"
 nav_class: "nav"
@@ -27,19 +34,13 @@ elements:
     - href: /index.html
       name: Home
 `
-
-    await fs.writeFile(CONFIG_FILE, configContent)
+    )
+    process.chdir(workDir)
 })
 
-afterAll(async () => {
-    await fs.rm(CONFIG_FILE, { force: true })
-
-    const tmpDir = path.join(`${process.cwd()}/test`, '.tmp')
-    try {
-        await fs.rm(tmpDir, { recursive: true, force: true })
-    } catch (e) {
-        console.warn('Failed to remove .tmp directory:', e)
-    }
+afterAll(() => {
+    process.chdir(REPO_ROOT)
+    fs.rmSync(workDir, { recursive: true, force: true })
 })
 
 describe('Navigation plugin integration', () => {

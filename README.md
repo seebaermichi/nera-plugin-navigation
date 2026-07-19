@@ -20,7 +20,7 @@ Install the plugin in your Nera project:
 npm install @nera-static/plugin-navigation
 ```
 
-Then create the configuration file:
+Then create the configuration file in your project:
 
 ```bash
 mkdir -p config
@@ -33,6 +33,11 @@ This creates:
 config/
 └── navigation.yaml
 ```
+
+The plugin ships a commented default at
+`node_modules/@nera-static/plugin-navigation/config/navigation.yaml` — copy it
+as a starting point. It is read from **your** project only; the packaged copy
+is documentation, not a fallback.
 
 Nera will automatically detect the plugin and load the configuration.
 
@@ -96,16 +101,25 @@ Loop through `app.nav.*.elements` directly in your Pug templates.
 Use the default templates provided by the plugin:
 
 ```bash
-npx @nera-static/plugin-navigation run publish-template
+npx nera-navigation
 ```
 
-This copies template files to:
+This copies every template file — including `partials/` and `helper/`, which
+the top-level templates include — to:
 
 ```
 views/vendor/plugin-navigation/
 ```
 
 Then include them in your layouts or pages as needed.
+
+Publishing **skips** if `views/vendor/plugin-navigation/` already exists, so
+your edits are never overwritten. To pull in updated templates after a plugin
+upgrade, discarding your changes to them:
+
+```bash
+npx nera-navigation --force
+```
 
 ## 🎨 Styling
 

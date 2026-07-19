@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-07-19
+
+### Fixed
+
+-   the `publish-template` command is now actually shipped. `bin/` was absent
+    from the published package and no `bin` entry existed, so the command
+    documented in the README could never resolve
+-   published templates now include their `partials/` and `helper/` files, so
+    they compile. Previously only the three top-level templates were copied and
+    every one of them failed on its first `include` (requires
+    `@nera-static/plugin-utils` ^1.2.0)
+-   a `navigation.yaml` entry missing `href` no longer crashes the build with a
+    `TypeError` from inside `node_modules`; the entry is skipped with a warning
+    naming its position
+
+### Added
+
+-   a commented default `config/navigation.yaml` is now shipped
+-   `npx nera-navigation --force` re-publishes over existing templates,
+    discarding local edits
+
+### Changed
+
+-   `@nera-static/plugin-utils` range widened to `^1.2.0`
+-   navigation config is resolved per call rather than at module load
+
 ## [2.1.0] - 2024-12-27
 
 ### Added

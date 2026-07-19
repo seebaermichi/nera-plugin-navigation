@@ -1,18 +1,43 @@
 import path from 'path'
 import { getConfig } from '@nera-static/plugin-utils'
 
-// Default location to look for navigation.yaml in host project
-const HOST_CONFIG_PATH = path.resolve(process.cwd(), 'config/navigation.yaml')
+// Resolved per call rather than at module scope: the host project's cwd is
+// what matters, and resolving lazily is what makes this testable.
+function getHostConfigPath() {
+    return path.resolve(process.cwd(), 'config/navigation.yaml')
+}
 
-function getNavElements(elements) {
-    return elements.map((element) => ({
-        ...element,
-        path: path.posix.dirname(element.href),
-    }))
+function getNavElements(elements, groupName) {
+    if (!Array.isArray(elements)) {
+        console.warn(
+            `⚠️ navigation.yaml: expected a list of elements${groupName ? ` under "${groupName}"` : ''}, got ${typeof elements}. Skipping.`
+        )
+        return []
+    }
+
+    return elements
+        .filter((element, index) => {
+            // A missing href is an ordinary YAML typo. Without this guard
+            // path.posix.dirname throws a TypeError from inside node_modules,
+            // which tells the user nothing about which entry is at fault.
+            if (!element || typeof element.href !== 'string') {
+                const where = groupName ? `${groupName}[${index}]` : `elements[${index}]`
+                console.warn(
+                    `⚠️ navigation.yaml: skipping ${where} — it has no "href".`
+                )
+                return false
+            }
+
+            return true
+        })
+        .map((element) => ({
+            ...element,
+            path: path.posix.dirname(element.href),
+        }))
 }
 
 function getMainNav() {
-    const navConfig = getConfig(HOST_CONFIG_PATH)
+    const navConfig = getConfig(getHostConfigPath())
 
     navConfig.activeClass = navConfig.active_class || 'active'
     navConfig.activePathClass = navConfig.active_path_class || 'active-path'
@@ -24,7 +49,7 @@ function getMainNav() {
         for (const key in navConfig.elements) {
             navConfig[key] = {
                 className: `${key}-${navConfig.navClass}`,
-                elements: getNavElements(navConfig.elements[key]),
+                elements: getNavElements(navConfig.elements[key], key),
             }
         }
     }

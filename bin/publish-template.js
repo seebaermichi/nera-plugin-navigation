@@ -7,11 +7,12 @@ import { publishAllTemplates } from '@nera-static/plugin-utils'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pluginName = 'plugin-navigation'
 const sourceDir = path.resolve(__dirname, '../views/')
+const force = process.argv.includes('--force')
 
 const result = publishAllTemplates({
     pluginName,
     sourceDir,
-    expectedPackageName: 'dummy', // for test-only override
+    force,
 })
 
 process.exit(result ? 0 : 1)
