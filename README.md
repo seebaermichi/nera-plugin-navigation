@@ -1,5 +1,8 @@
 # @nera-static/plugin-navigation
 
+[![Test](https://github.com/seebaermichi/nera-plugin-navigation/actions/workflows/test.yml/badge.svg)](https://github.com/seebaermichi/nera-plugin-navigation/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/@nera-static/plugin-navigation)](https://www.npmjs.com/package/@nera-static/plugin-navigation)
+
 A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator to create navigations from config files. Supports mixins and templates for easy rendering and styling.
 
 ## ✨ Features
