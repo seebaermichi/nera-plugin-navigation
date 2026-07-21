@@ -99,6 +99,31 @@ Each element includes `href`, `name`, and `path`.
 
 Loop through `app.nav.*.elements` directly in your Pug templates.
 
+### Mixins
+
+Each published template exposes a mixin taking `(elements, className, rootPath)`:
+
+```pug
+include views/vendor/plugin-navigation/partials/link-list-navigation
+
++linkListNav(app.nav.main.elements, 'nav--main')
+```
+
+`rootPath` (default `/`) is the directory that counts as the site root. It
+decides when a link is marked with the active-path class: a page sitting
+directly in the root has no parent section, so nothing is marked as its
+ancestor.
+
+Set it whenever your pages live under a shared prefix — a language prefix, or
+a deployment into a subdirectory — otherwise a page directly inside that
+prefix looks nested, and since every nav href shares the prefix, **the whole
+menu** gets the active-path class:
+
+```pug
+//- Pages live at /de/…, so /de is this language's root
++linkListNav(app.nav.main_de.elements, 'nav--main', '/de')
+```
+
 ## 🛠️ Template Publishing
 
 Use the default templates provided by the plugin:

@@ -1,6 +1,6 @@
 include ../helper/mixins
 
-mixin simpleNav(elements=app.nav.elements, className='')
+mixin simpleNav(elements=app.nav.elements, className='', rootPath='/')
     nav(class=`${className}`)
         include ../helper/setup
             +link(item, activeClass, activePathClass)

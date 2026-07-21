@@ -1,6 +1,6 @@
 include ../helper/mixins
 
-mixin linkListNav(elements=app.nav.elements, className='')
+mixin linkListNav(elements=app.nav.elements, className='', rootPath='/')
     ul.nav.nav--list(class=`${className}`)
         include ../helper/setup
             li.nav__item

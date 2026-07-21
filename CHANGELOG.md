@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-07-21
+
+### Added
+
+-   `rootPath` argument on the `linkListNav`, `simpleNav` and
+    `pipeSeparatedNav` mixins, defaulting to `/`. It names the directory that
+    counts as the site root, for sites whose pages live under a shared prefix
+    such as `/de` or a subdirectory deployment
+
+### Fixed
+
+-   the active-path class is no longer applied to every navigation entry on a
+    page that sits directly in a prefixed root. The check recognised only `/`
+    as a root, so for a page such as `/es/about.html` the prefix `/es` looked
+    like an ordinary section, and since every navigation href in that language
+    starts with `/es`, all of them matched. Pass the prefix as `rootPath` to
+    resolve it
+-   the ancestor test is anchored at a path separator, so a page in `/docs` no
+    longer claims `/docs-archive/index.html` as part of its own section
+
+### Notes
+
+-   the templates are unchanged in markup and class names, and existing call
+    sites keep working — `rootPath` defaults to `/`, which is exactly the
+    previous behaviour. Sites that already published templates need
+    `npx nera-navigation --force` to pick up the corrected `helper/setup.pug`
+
+
 ## [2.3.0] - 2026-07-21
 
 ### Changed

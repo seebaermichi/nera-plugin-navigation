@@ -1,6 +1,15 @@
 each item, index in elements || app.nav.elements
   - const isActive = item.href === meta.fullPath
   - const activeClass = isActive ? 'nav__link--active' : ''
-  - const isNotHome = meta.dirname !== '/'
-  - const isParent = isNotHome && item.href.indexOf(meta.dirname) === 0
+  //- The directory that counts as the site root. Defaults to '/', but a site
+  //- that prefixes its pages — a language prefix such as /de, a subdirectory
+  //- deployment — passes its own through the mixin's `rootPath` argument.
+  //- Without it, a page sitting directly in that prefix looks nested, and
+  //- since every nav href shares the prefix, the test below matches the whole
+  //- menu instead of one entry.
+  - const navRoot = (typeof rootPath !== 'undefined' && rootPath) || '/'
+  - const isNotHome = meta.dirname !== navRoot
+  //- Anchored at a path separator: without the trailing slash a page in /docs
+  //- would also claim /docs-archive/index.html as part of its section.
+  - const isParent = isNotHome && item.href.indexOf(meta.dirname + '/') === 0
   - const activePathClass = !isActive && isParent ? 'nav__link--active-path' : ''
