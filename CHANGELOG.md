@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2026-07-22
+
+### Changed
+
+-   documented that upgrading from 2.x requires `npx nera-navigation --force`
+    to pick up the configurable class names. Publishing skips an existing
+    `views/vendor/plugin-navigation/`, so a site that published under 2.x keeps
+    the old templates with the class names hardcoded, and `nav_class` appears
+    to do nothing. Added to the 3.0.0 migration notes and to the Template
+    Publishing section of the README
+
+
 ## [3.0.0] - 2026-07-22
 
 ### Added
@@ -82,6 +94,20 @@ include /vendor/plugin-navigation/partials/link-list-navigation
 
 **If you read `app.nav.elements` directly under a grouped config**, it is now
 `[]` rather than the raw config object. Read `app.nav.<group>.elements`.
+
+**To actually get the configurable class names, you must republish the
+templates.** The class names live in the Pug files, and publishing skips any
+`views/vendor/plugin-navigation/` that already exists — so an existing site
+keeps its 2.x templates, with the class names still hardcoded, and
+`nav_class` goes on doing nothing. Overwrite them:
+
+```bash
+npx nera-navigation --force
+```
+
+This discards any edits you made to the published templates, so diff them
+first if you have customised them. Upgrading without this step is safe and
+changes nothing; you simply do not get the new behaviour.
 
 
 ## [2.4.1] - 2026-07-21

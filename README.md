@@ -210,6 +210,10 @@ upgrade, discarding your changes to them:
 npx nera-navigation --force
 ```
 
+> **Upgrading from 2.x?** The class names live in these Pug files, so a site
+> that published under 2.x keeps the old templates and `nav_class` will appear
+> to do nothing. Run `--force` once to pick up the configurable class names.
+
 ## 🎨 Styling
 
 The plugin uses BEM CSS methodology. These are the classes the templates
