@@ -96,6 +96,8 @@ describe('Navigation Plugin Unit Tests', () => {
             const result = getAppData(mockData)
 
             expect(result).toHaveProperty('nav')
+            // This fixture sets the class keys explicitly, so the configured
+            // values win over the derived defaults.
             expect(result.nav.activeClass).toBe('active')
             expect(result.nav.activePathClass).toBe('active-path')
             expect(result.nav.navClass).toBe('nav')
@@ -166,8 +168,8 @@ elements:
 
             const result = getAppData({ app: {} })
 
-            expect(result.nav.activeClass).toBe('active')
-            expect(result.nav.activePathClass).toBe('active-path')
+            expect(result.nav.activeClass).toBe('nav__link--active')
+            expect(result.nav.activePathClass).toBe('nav__link--active-path')
             expect(result.nav.navClass).toBe('nav')
         })
 
@@ -208,8 +210,10 @@ elements:
         it('should tolerate a missing navigation.yaml', () => {
             const result = getAppData({ app: { title: 'Test Site' } })
 
-            expect(result.nav.activeClass).toBe('active')
-            expect(result.nav.elements).toBeUndefined()
+            expect(result.nav.activeClass).toBe('nav__link--active')
+            // Grouped or absent config yields an empty array, never the raw
+            // config object -- zero-argument templates must not throw.
+            expect(result.nav.elements).toEqual([])
         })
     })
 })

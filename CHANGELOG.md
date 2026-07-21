@@ -5,6 +5,85 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-07-22
+
+### Added
+
+-   `nav_class`, `active_class` and `active_path_class` now actually work. The
+    templates read them instead of hardcoding class names, so `nav_class` is a
+    real BEM block name: setting `nav_class: mainmenu` renames the whole family
+    to `.mainmenu`, `.mainmenu--list`, `.mainmenu__item`, `.mainmenu__link`,
+    `.mainmenu__link--active`
+-   integration tests covering configurable class names, and covering every
+    entry template against a grouped and an absent config
+
+### Fixed
+
+-   **BREAKING**: a grouped (multi-navigation) config no longer crashes the
+    ready-made templates. `app.nav.elements` was left as the raw config object,
+    so a zero-argument mixin call reached `item.href.replace` on an array and
+    threw. It is now always an array — empty when the config is grouped or
+    absent, so those templates render an empty navigation instead of failing
+    the build
+-   the README's only include snippet pointed at
+    `views/vendor/plugin-navigation/…`, which resolves from no directory at
+    all: it lacked the leading `/` **and** carried a spurious `views/` segment
+-   the documented BEM class list named three classes no template emits
+    (`.nav__list`, `.nav__item--inline`, `.nav__separator`) and omitted
+    `.nav--list`, which every list navigation carries
+
+### Changed
+
+-   **BREAKING**: `app.nav.activeClass` and `app.nav.activePathClass` now
+    default to `nav__link--active` / `nav__link--active-path` — the values the
+    templates have always emitted — instead of `active` / `active-path`, values
+    that appeared nowhere in the markup
+-   **BREAKING**: `app.nav.elements` is `[]` rather than the raw config object
+    when the config is grouped
+-   the packaged `config/navigation.yaml` ships the three class keys commented
+    out, so copying it no longer changes your markup
+-   documented that `href` is required and that entries lacking it are skipped
+    with a warning, that `path` is derived, and that extra keys pass through
+-   documented every entry template and mixin by name, and the role of
+    `helper/`
+-   Node requirement corrected to `>= 20.0.0`; added the `@nera-static/plugin-utils`
+    `^1.2.0` range and the reason behind the Nera v4.1.0 floor
+-   added a Contributing section
+
+### Migration from v2.x
+
+**If you never set `active_class`, `active_path_class` or `nav_class`,
+nothing changes.** The rendered markup is byte-identical to 2.4.1.
+
+**If you copied the packaged `config/navigation.yaml`** — which shipped with
+`active_class: active`, `active_path_class: active-path`, `nav_class: nav` —
+those values were previously ignored and are now applied. Your active links
+would change from `nav__link--active` to `active`. To keep your existing CSS
+working, comment the three keys out:
+
+```yaml
+# active_class: active
+# active_path_class: active-path
+# nav_class: nav
+```
+
+Or keep them and update your CSS to match. The base class `nav` produces the
+same output either way.
+
+**If you use a grouped config** with the ready-made entry templates, they
+previously threw; they now render an empty navigation. Include the `partials/`
+file and call the mixin with explicit elements instead:
+
+```pug
+include /vendor/plugin-navigation/partials/link-list-navigation
+
++linkListNav(app.nav.main.elements, 'nav--main')
+```
+
+**If you read `app.nav.elements` directly under a grouped config**, it is now
+`[]` rather than the raw config object. Read `app.nav.<group>.elements`.
+
+
 ## [2.4.1] - 2026-07-21
 
 ### Fixed

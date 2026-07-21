@@ -39,9 +39,14 @@ function getNavElements(elements, groupName) {
 function getMainNav() {
     const navConfig = getConfig(getHostConfigPath())
 
-    navConfig.activeClass = navConfig.active_class || 'active'
-    navConfig.activePathClass = navConfig.active_path_class || 'active-path'
+    // `nav_class` is the BEM block name; the element and modifier classes are
+    // derived from it, so setting it renames the whole family coherently. The
+    // two active classes may still be overridden individually.
     navConfig.navClass = navConfig.nav_class || 'nav'
+    navConfig.activeClass =
+        navConfig.active_class || `${navConfig.navClass}__link--active`
+    navConfig.activePathClass =
+        navConfig.active_path_class || `${navConfig.navClass}__link--active-path`
 
     if (Array.isArray(navConfig.elements)) {
         navConfig.elements = getNavElements(navConfig.elements)
@@ -52,6 +57,12 @@ function getMainNav() {
                 elements: getNavElements(navConfig.elements[key], key),
             }
         }
+
+        // Grouped config (or no config at all) has no single default
+        // navigation. Leave `elements` an empty array rather than the raw
+        // config object, so a template calling a mixin with no arguments
+        // renders an empty navigation instead of throwing on `item.href`.
+        navConfig.elements = []
     }
 
     return navConfig

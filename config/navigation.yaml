@@ -4,14 +4,19 @@
 # config/navigation.yaml from YOUR project root, not from this package —
 # copy this file there and edit it.
 
+# BEM block name for the navigation. The element and modifier classes are
+# derived from it, so changing it renames the whole family: `nav` gives
+# `nav`, `nav--list`, `nav__item`, `nav__link`, `nav__link--active`.
+# Leave commented out to keep the defaults.
+# nav_class: nav
+
 # CSS class applied to the link matching the current page.
-active_class: active
+# Defaults to "<nav_class>__link--active", i.e. nav__link--active.
+# active_class: nav__link--active
 
 # CSS class applied to a link whose path is an ancestor of the current page.
-active_path_class: active-path
-
-# Base CSS class for the navigation element.
-nav_class: nav
+# Defaults to "<nav_class>__link--active-path".
+# active_path_class: nav__link--active-path
 
 # A single navigation: a flat list, available as app.nav.elements
 elements:

@@ -1,2 +1,3 @@
 mixin link(item, activeClass, activePathClass)
-  a.nav__link(href=item.href, class=`${activeClass} ${activePathClass}`.trim()) #{ item.name }
+  - const navBlock = (app.nav && app.nav.navClass) || 'nav'
+  a(href=item.href, class=[`${navBlock}__link`, activeClass, activePathClass]) #{ item.name }
