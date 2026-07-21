@@ -4,12 +4,15 @@ each item, index in elements || app.nav.elements
   //- The directory that counts as the site root. Defaults to '/', but a site
   //- that prefixes its pages — a language prefix such as /de, a subdirectory
   //- deployment — passes its own through the mixin's `rootPath` argument.
-  //- Without it, a page sitting directly in that prefix looks nested, and
-  //- since every nav href shares the prefix, the test below matches the whole
-  //- menu instead of one entry.
   - const navRoot = (typeof rootPath !== 'undefined' && rootPath) || '/'
-  - const isNotHome = meta.dirname !== navRoot
-  //- Anchored at a path separator: without the trailing slash a page in /docs
-  //- would also claim /docs-archive/index.html as part of its section.
-  - const isParent = isNotHome && item.href.indexOf(meta.dirname + '/') === 0
+  //- The section an entry stands for: the directory its own href lives in.
+  - const itemDir = item.href.replace(/\/[^/]*$/, '') || '/'
+  //- An entry is an ancestor of the current page when that page sits inside
+  //- the entry's section — either directly in it, or further down. Asking the
+  //- reverse, whether the entry sits inside the current page's directory,
+  //- holds only for pages exactly one level deep: a page at
+  //- /tutorials/tags/links.html would not match /tutorials/index.html.
+  //- Entries living in the root are never ancestors, since every page is
+  //- inside the root and Home would otherwise be marked on every page.
+  - const isParent = itemDir !== navRoot && (meta.dirname === itemDir || meta.dirname.indexOf(itemDir + '/') === 0)
   - const activePathClass = !isActive && isParent ? 'nav__link--active-path' : ''

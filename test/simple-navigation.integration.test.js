@@ -151,6 +151,33 @@ describe('Navigation plugin integration', () => {
         ).not.toContain('active')
     })
 
+    it('marks the section from a page nested more than one level deep', () => {
+        // e.g. tag overview pages generated under /tutorials/tags/ — the
+        // Tutorials entry is still their section, two levels up.
+        const html = renderNav({
+            elements: [
+                { href: '/index.html', name: 'Home' },
+                { href: '/tutorials/index.html', name: 'Tutorials' },
+                { href: '/docs/index.html', name: 'Docs' },
+            ],
+            meta: {
+                dirname: '/tutorials/tags',
+                fullPath: '/tutorials/tags/links.html',
+            },
+        })
+
+        const $ = load(html)
+        expect($('a[href="/tutorials/index.html"]').attr('class')).toContain(
+            'active-path'
+        )
+        expect($('a[href="/docs/index.html"]').attr('class') || '').not.toContain(
+            'active'
+        )
+        expect($('a[href="/index.html"]').attr('class') || '').not.toContain(
+            'active'
+        )
+    })
+
     it('defaults rootPath to / so existing call sites are unaffected', () => {
         const html = renderNav({
             elements: [

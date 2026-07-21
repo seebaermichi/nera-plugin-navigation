@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.1] - 2026-07-21
+
+### Fixed
+
+-   the active-path class is now applied to a section entry when the current
+    page sits anywhere beneath it, not only one level down. The check asked
+    whether the navigation entry lived inside the current page's directory,
+    which is the relationship inverted: it happens to hold when a page is a
+    direct child of its section, and fails below that. A page at
+    `/tutorials/tags/links.html` — for instance a tag overview generated with
+    `tag_overview_path: /tutorials/tags` — left `/tutorials/index.html`
+    unmarked. Entries whose href sits in the root are still never treated as
+    ancestors, so Home is not marked on every page
+
+
 ## [2.4.0] - 2026-07-21
 
 ### Added
