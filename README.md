@@ -5,6 +5,8 @@
 
 A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator to create navigations from config files. Supports mixins and templates for easy rendering and styling.
 
+📖 **Documentation:** [nera.js.org](https://nera.js.org)
+
 ## ✨ Features
 
 - Define one or more navigations via YAML config
@@ -284,6 +286,7 @@ Michael Becker
 
 - [Plugin Repository](https://github.com/seebaermichi/nera-plugin-navigation)
 - [NPM Package](https://www.npmjs.com/package/@nera-static/plugin-navigation)
+- [Nera Website](https://nera.js.org)
 - [Nera Static Site Generator](https://github.com/seebaermichi/nera)
 
 ## 🧩 Compatibility
