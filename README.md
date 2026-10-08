@@ -244,7 +244,42 @@ Two things worth knowing:
 
 ## 📊 Generated Output
 
-The plugin injects navigation data into `app.nav` without generating HTML. Use templates or mixins for output.
+The plugin itself writes data, not HTML: `app.nav` holds the configured
+entries (each with a derived `path`) plus the resolved class names. The markup
+comes from whichever template or mixin you include.
+
+With the three-entry config below, on the page `/about/me.html`, the shipped
+entry templates render the following — produced by running them and formatting
+the result the way `nera build` does:
+
+```yaml
+elements:
+    - href: /index.html
+      name: Home
+    - href: /about/index.html
+      name: About
+    - href: /about/me.html
+      name: Me
+```
+
+```html
+<!-- link-list-navigation.pug -->
+<ul class="nav nav--list">
+  <li class="nav__item"><a class="nav__link" href="/index.html">Home</a></li>
+  <li class="nav__item"><a class="nav__link nav__link--active-path" href="/about/index.html">About</a></li>
+  <li class="nav__item"><a class="nav__link nav__link--active" href="/about/me.html">Me</a></li>
+</ul>
+<!-- simple-navigation.pug -->
+<nav><a class="nav__link" href="/index.html">Home</a><a class="nav__link nav__link--active-path" href="/about/index.html">About</a><a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
+<!-- pipe-separated-navigation.pug -->
+<nav><a class="nav__link" href="/index.html">Home</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active-path" href="/about/index.html">About</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
+```
+
+`Me` is the current page and gets `nav__link--active`. `About` lives in
+`/about`, the section containing the current page, so it gets
+`nav__link--active-path`. `Home` lives in the site root, which is never marked
+as an ancestor. The mixins produce the same markup, with any `className` you
+pass added to the outer element.
 
 ## 🧪 Development
 
