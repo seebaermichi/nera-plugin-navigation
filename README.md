@@ -166,10 +166,12 @@ include /vendor/plugin-navigation/partials/link-list-navigation
 +linkListNav(app.nav.main.elements, 'nav--main')
 ```
 
-The leading `/` makes the path resolve from your `views/` folder regardless of
-where the including file sits. It requires **Nera v4.3.0+**, which is when the
-renderer began setting Pug's `basedir`. On older generators use a path relative
-to the including file instead, e.g. `../vendor/plugin-navigation/partials/…`.
+The leading `/` makes the path resolve from your views folder — `theme/views/`
+on a site scaffolded with `nera new` — regardless of where the including file
+sits; there is no `theme/` or `views/` segment in the path. It requires
+**Nera v4.3.0+**, which is when the renderer began setting Pug's `basedir`. On
+older generators use a path relative to the including file instead, e.g.
+`../vendor/plugin-navigation/partials/…` from `theme/views/layouts/layout.pug`.
 
 `rootPath` (default `/`) is the directory that counts as the site root. It
 decides when a link is marked with the active-path class: a page sitting
@@ -198,13 +200,18 @@ This copies every template file — including `partials/` and `helper/`, which
 the top-level templates include — to:
 
 ```
-views/vendor/plugin-navigation/
+theme/views/vendor/plugin-navigation/
 ```
+
+That is the views folder of a site scaffolded with `nera new`. On an older site
+that renders from a root `views/` folder (no `theme/`), the destination is
+`views/vendor/plugin-navigation/` — `npx nera-navigation` picks the right one
+automatically.
 
 Then include them in your layouts or pages as needed — see
 [Mixins](#mixins) for which file to include and what each one renders.
 
-Publishing **skips** if `views/vendor/plugin-navigation/` already exists, so
+Publishing **skips** if `…/vendor/plugin-navigation/` already exists, so
 your edits are never overwritten. To pull in updated templates after a plugin
 upgrade, discarding your changes to them:
 
@@ -329,9 +336,13 @@ Michael Becker
 - **Nera**: v4.1.0+ — the templates read `meta.fullPath`, which the generator
   began providing in 4.1.0. The root-absolute include form shown above
   additionally needs **v4.3.0+**; on older generators use a relative include.
+  The `theme/` folder layout used in the examples — what `nera new` scaffolds —
+  needs v4.6.0+.
 - **Node.js**: >= 20.0.0
 - **Plugin Utils**: `^1.2.0` — `publishAllTemplates`, which ships the
-  `partials/` and `helper/` folders, arrived in 1.2.0
+  `partials/` and `helper/` folders, arrived in 1.2.0. Publishing into
+  `theme/views/` (rather than root `views/`) needs 1.5.0+, which the caret
+  range resolves to on a fresh install
 - **Plugin API**: Uses `getAppData()` for injecting navigation structure
 
 ## 📦 License
