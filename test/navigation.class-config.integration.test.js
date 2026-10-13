@@ -119,9 +119,9 @@ describe('templates never throw on a non-flat config', () => {
     })
 
     it('renders an empty navigation for every entry template', () => {
-        expect(render(GROUPED, 'simple-navigation.pug')).toBe('<nav></nav>')
+        expect(render(GROUPED, 'simple-navigation.pug')).toBe('<nav aria-label="Navigation"></nav>')
         expect(render(GROUPED, 'pipe-separated-navigation.pug')).toBe(
-            '<nav></nav>'
+            '<nav aria-label="Navigation"></nav>'
         )
     })
 

@@ -147,7 +147,8 @@ a single flat navigation:
 | `pipe-separated-navigation.pug` | `<nav>` with `|`-separated links |
 
 Three more under `partials/` define the **mixins**, each taking
-`(elements, className, rootPath)`. Include the partial, not the entry template,
+`(elements, className, rootPath)` — `simpleNav` and `pipeSeparatedNav` take a
+fourth, `label`, described below. Include the partial, not the entry template,
 whenever you need to pass elements explicitly — which is always, for a grouped
 config:
 
@@ -187,6 +188,19 @@ menu** gets the active-path class:
 //- Pages live at /de/…, so /de is this language's root
 +linkListNav(app.nav.main_de.elements, 'nav--main', '/de')
 ```
+
+`label` names the `<nav>` that `simpleNav` and `pipeSeparatedNav` render
+(`aria-label`), so screen readers can tell your menus apart and `nera check`
+reports no `a11y-nav-name`. It defaults to the translation key `Navigation`
+(`t('Navigation')`, which falls back to the English word); give each menu on a
+page its own label:
+
+```pug
++simpleNav(app.nav.footer.elements, 'nav--footer', '/', t('Footer'))
+```
+
+`linkListNav` renders a `<ul>`, not a `<nav>`: wrap it in your own labelled
+`nav(aria-label=…)`.
 
 ## 🛠️ Template Publishing
 
@@ -277,9 +291,9 @@ elements:
   <li class="nav__item"><a class="nav__link nav__link--active" href="/about/me.html">Me</a></li>
 </ul>
 <!-- simple-navigation.pug -->
-<nav><a class="nav__link" href="/index.html">Home</a><a class="nav__link nav__link--active-path" href="/about/index.html">About</a><a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
+<nav aria-label="Navigation"><a class="nav__link" href="/index.html">Home</a><a class="nav__link nav__link--active-path" href="/about/index.html">About</a><a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
 <!-- pipe-separated-navigation.pug -->
-<nav><a class="nav__link" href="/index.html">Home</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active-path" href="/about/index.html">About</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
+<nav aria-label="Navigation"><a class="nav__link" href="/index.html">Home</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active-path" href="/about/index.html">About</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
 ```
 
 `Me` is the current page and gets `nav__link--active`. `About` lives in

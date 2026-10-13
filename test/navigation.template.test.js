@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import path from 'path'
 import fs from 'fs/promises'
 import { fileURLToPath } from 'url'
+import pug from 'pug'
+import { load } from 'cheerio'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const VIEWS_DIR = path.join(__dirname, '../views')
@@ -63,4 +65,25 @@ describe('Navigation Template Files', () => {
             expect(content).toContain('activePathClass')
         })
     })
+})
+
+describe('nav landmark label', () => {
+    const app = { nav: { elements: [{ href: '/index.html', name: 'Home' }] } }
+    const meta = { fullPath: '/about.html', dirname: '/' }
+
+    const render = (source, locals = {}) =>
+        load(pug.render(source, { basedir: VIEWS_DIR, filename: path.join(VIEWS_DIR, 'x.pug'), app, meta, ...locals }))
+
+    for (const [partial, mixin] of [['simple-navigation', 'simpleNav'], ['pipe-separated-navigation', 'pipeSeparatedNav']]) {
+        it(`${mixin} names its <nav>, through t(), and takes an explicit label`, () => {
+            const include = `include /partials/${partial}\n`
+
+            expect(render(`${include}+${mixin}`)('nav').attr('aria-label')).toBe('Navigation')
+
+            const t = (key) => ({ Navigation: 'Navigation (de)' })[key] || key
+            expect(render(`${include}+${mixin}`, { t })('nav').attr('aria-label')).toBe('Navigation (de)')
+
+            expect(render(`${include}+${mixin}(app.nav.elements, '', '/', 'Footer')`)('nav').attr('aria-label')).toBe('Footer')
+        })
+    }
 })
