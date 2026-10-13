@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2026-10-13
+
+### Fixed
+
+-   **A link to a single page no longer marks its siblings.** The active-path
+    class went on every entry whose directory contained the current page, so
+    with `/about/index.html` and `/about/me.html` in the menu, `Me` was marked
+    on the About page (and on every other page in `/about`). Only an entry
+    pointing at a directory's index (`/about/index.html` or `/about/`) stands
+    for a section now. The fix is in the published `helper/setup.pug`: a site
+    that published the templates before picks it up with
+    `npx nera-navigation --force`, or by copying that file's `isSection` line.
+
 ## [3.1.0] - 2026-10-13
 
 ### Added

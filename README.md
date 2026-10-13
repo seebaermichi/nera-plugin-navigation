@@ -248,7 +248,7 @@ actually emit, with the default `nav_class: nav`:
 .nav__item { }                /* link-list template only */
 .nav__link { }                /* every template */
 .nav__link--active { }        /* link matching the current page */
-.nav__link--active-path { }   /* link that is an ancestor of it */
+.nav__link--active-path { }   /* section link the page sits in */
 ```
 
 Rename the whole family with `nav_class`, or override the two state classes
@@ -296,10 +296,11 @@ elements:
 <nav aria-label="Navigation"><a class="nav__link" href="/index.html">Home</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active-path" href="/about/index.html">About</a>&nbsp;|&nbsp;<a class="nav__link nav__link--active" href="/about/me.html">Me</a></nav>
 ```
 
-`Me` is the current page and gets `nav__link--active`. `About` lives in
-`/about`, the section containing the current page, so it gets
+`Me` is the current page and gets `nav__link--active`. `About` points at the
+index of `/about`, the section containing the current page, so it gets
 `nav__link--active-path`. `Home` lives in the site root, which is never marked
-as an ancestor. The mixins produce the same markup, with any `className` you
+as an ancestor. Only a link to a directory's index (`/about/index.html` or
+`/about/`) stands for a section: on `/about/index.html`, `Me` gets no class. The mixins produce the same markup, with any `className` you
 pass added to the outer element.
 
 ## 🧪 Development

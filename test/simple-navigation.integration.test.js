@@ -178,6 +178,46 @@ describe('Navigation plugin integration', () => {
         )
     })
 
+    it('does not mark a link to a single page as the section of its siblings', () => {
+        const elements = [
+            { href: '/about/index.html', name: 'About' },
+            { href: '/about/me.html', name: 'Me' },
+            { href: '/docs/', name: 'Docs' },
+        ]
+
+        const onIndex = load(
+            renderNav({
+                elements,
+                meta: { dirname: '/about', fullPath: '/about/index.html' },
+            })
+        )
+        expect(onIndex('a[href="/about/me.html"]').attr('class') || '').not.toContain(
+            'active'
+        )
+
+        const onSibling = load(
+            renderNav({
+                elements,
+                meta: { dirname: '/about', fullPath: '/about/team.html' },
+            })
+        )
+        expect(onSibling('a[href="/about/index.html"]').attr('class')).toContain(
+            'active-path'
+        )
+        expect(
+            onSibling('a[href="/about/me.html"]').attr('class') || ''
+        ).not.toContain('active')
+
+        // A trailing slash stands for the directory's index too.
+        const inDocs = load(
+            renderNav({
+                elements,
+                meta: { dirname: '/docs', fullPath: '/docs/cli.html' },
+            })
+        )
+        expect(inDocs('a[href="/docs/"]').attr('class')).toContain('active-path')
+    })
+
     it('defaults rootPath to / so existing call sites are unaffected', () => {
         const html = renderNav({
             elements: [
