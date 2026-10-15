@@ -14,7 +14,7 @@
         ".": "./index.js"
     },
     "bin": {
-        "nera-navigation": "./bin/publish-template.js"
+        "nera-navigation": "bin/publish-template.js"
     },
     "files": [
         "bin",
@@ -35,7 +35,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/seebaermichi/nera-plugin-navigation.git"
+        "url": "git+https://github.com/seebaermichi/nera-plugin-navigation.git"
     },
     "bugs": {
         "url": "https://github.com/seebaermichi/nera-plugin-navigation/issues"
